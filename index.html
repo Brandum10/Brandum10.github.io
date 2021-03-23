@@ -1,80 +1,128 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Autenticación</title>
-    <link rel="stylesheet" href="estilos.css">
 
-   <!-- Carga el núcleo de Firebase JS SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
-    <!-- Agrega el manejo de autenticación. -->
-    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js">
-    </script>
-    <script src="js/init.js"></script>
-  </head>
-  <body>
-    <h1>Autenticación</h1>
-    <h1>Sesión</h1>
-    <fieldset>
-      <legend>Email</legend>
-      <output id="email"><progress max="100">Cargando…</progress></output>
-    </fieldset>
-    <fieldset>
-      <legend>Nombre</legend>
-      <output id="nombre"></output>
-    </fieldset>
-    <figure><img id="avatar" alt="Avatar"></figure>
-    <button type="button" onclick="terminaSesión()">Terminar Sesión</button>
-    <footer>Copyright &copy; 2021 Ricardo Armando Machorro Reyes.</footer>
-    <script>
-      //@ts-check
-      /** Conexión al sistema de autenticación de Firebase. */
-      // @ts-ignore
-      const auth = firebase.auth();
-      /** Tipo de autenticación de usuarios. En este caso es con Google. */
-      // @ts-ignore
-      const provider = new firebase.auth.GoogleAuthProvider();
-      /* Configura el proveedor de Google para que permita seleccionar de una
-       * lista. */
-      provider.setCustomParameters({ prompt: "select_account" });
-      /* Recibe una función que se invoca cada que hay un cambio en la
-       * autenticación y recibe el modelo con las características del usuario.*/
-      auth.onAuthStateChanged(
-        /** Recibe las características del usuario o null si no ha iniciado
-         * sesión. */
-        usuarioAuth => {
-          if (usuarioAuth && usuarioAuth.email) {
-            // Usuario aceptado.
-            // @ts-ignore Muestra el email registrado en Google.
-            email.value = usuarioAuth.email;
-            // @ts-ignore Muestra el nombre registrado en Google.
-            nombre.value = usuarioAuth.displayName;
-            // @ts-ignore Muestra el avatar registrado en Google.
-            avatar.src = usuarioAuth.photoURL;
-          } else {
-            // No ha iniciado sesión. Pide datos para iniciar sesión.
-            auth.signInWithRedirect(provider);
-          }
-        },
-        // Función que se invoca si hay un error al verificar el usuario.
-        procesaError
-      );
-      /** Termina la sesión. */
-      async function terminaSesión() {
-        try {
-          await auth.signOut();
-        } catch (e) {
-          procesaError(e);
-        }
-      }
-      /** Procesa un error. Muestra el objeto en la consola y un cuadro de
-       * alerta con el mensaje.
-       * @param {Error} e descripción del error. */
-      function procesaError(e) {
-        console.log(e);
-        alert(e.message);
-      }
-    </script>
-  </body>
+<html>
+<head>
+<title>Pagina 02</title>
+
+<script language="javascript">
+<!--
+function Subir()
+{
+	var formulario="";
+	var usuario=document.form1.usuario.value;
+	var nombre=document.form1.nombre.value;
+	var apellido=document.form1.apellido.value;
+	var email=document.form1.email.value;
+	var clave1=document.form1.clave1.value;
+	var clave2=document.form1.clave2.value;
+	var hobbies="";
+	var b=document.form1.hobby.length;
+	for(a=0;a<b;a++)
+	{
+	if (document.form1.hobby[a].checked)
+		hobbies+=document.form1.hobby[a].value + ", ";
+	}
+	var pais=document.form1.pais.value;
+	var sexo=document.form1.sexo.value;
+	if (usuario=="" || nombre=="" || apellido=="" || pais=="" )
+	{
+		alert("Los campos con asterisco son obligatorios!!!");
+		return false;
+	}
+	if (hobbies.length==0)
+	{
+		alert("Debes seleccionar al menos un hobby!!");
+		return false;
+	}
+	if ((clave1!=clave2) || (clave1==""))
+	{
+		alert("Las claves deben ser iguales y no pueden ser en blanco!!!");
+		return false;
+	}
+	if (email=="") email="No informado";
+	if (sexo=="") sexo="No informado";
+	formulario="Usuario: " + usuario + "\nNombre: " + nombre + "\nApellido: " + apellido + "\n"
+		 + "E-mail: " + email + "\nClave: " + clave1  + "\nHobbies: " + hobbies + "\nPais: "
+		+ pais + "\nSexo: " + sexo;
+	alert(formulario);	
+}
+
+//-->
+</script>
+
+</head>
+<body>
+<form name="form1" method="POST" action="">
+<table border="0" cellpadding="0" cellspacing="0" width="400">
+<tr>
+	<td width="50%">Ingresa el usuario: (*)</td>
+	<td width="50%"><input type="text" name="usuario" id="usuario" value=""></td>
+</tr>
+<tr>
+	<td width="50%">Ingresa el nombre: (*)</td>
+	<td><input type="text" name="nombre" id="nombre" value=""></td>
+</tr>
+<tr>
+	<td width="50%">Ingresa el apellido: (*)</td>
+	<td><input type="text" name="apellido" id="apellido" value=""></td>
+</tr>
+<tr>
+	<td width="50%">Ingresa el correo electronico:</td>
+	<td width="50%"><input type="text" name="email" id="email" value=""></td>
+</tr>
+<tr>
+	<td width="50%">Ingresa una password: (*)</td>
+	<td width="50%"><input type="password" name="clave1" id="clave1" value=""></td>
+</tr>
+<tr>
+	<td width="50%">Repite la password: (*)</td>
+	<td width="50%"><input type="password" name="clave2" id="clave2" value=""></td>
+</tr>
+<tr>
+	<td width="50%" align="left" valign="top">Seleccione sus hobbies: (*)</td>
+	<td width="50%">
+	<input type="checkbox" name="hobby" value="programar">Programar&nbsp;
+	<input type="checkbox" name="hobby" value="deportes">Deportes<br>
+	<input type="checkbox" name="hobby" value="meditar">Meditar&nbsp;
+	<input type="checkbox" name="hobby" value="cine">Cine<br>
+	<input type="checkbox" name="hobby" value="leer">Leer&nbsp;
+	<input type="checkbox" name="hobby" value="videojuegos">Video Juegos<br>
+	</td>
+</tr>
+<tr>
+	<td width="50%">Pais: (*)</td>
+	<td width="50%">
+	<select name="pais" id="pais">
+		<option value="">--</option>
+		<option value="mexico">Mexico</option>
+		<option value="brasil">Brasil</option>
+		<option value="chile">Chile</option>
+		<option value="colombia">Colombia</option>
+		<option value="ecuador">Ecuador</option>
+	</select>
+	</td>
+</tr>
+<tr>
+	<td width="50%">Sexo:</td>
+	<td width="50%">
+	<input type="radio" name="sexo" value="m">M&nbsp;
+	<input type="radio" name="sexo" value="f">F&nbsp;
+	<input type="radio" name="sexo" value="n">N&nbsp;
+	</td>
+</tr>
+<tr>
+	<td width="50%" align="center">
+		<button type="button" name="boton" onClick="Subir()">Crear usuario</button>
+	</td>
+	<td width="50%" align="center">
+		<button type="reset" name="botonR">Cancelar</button>
+	</td>
+</tr>
+</table>
+Los campos con asteriscos(*) son obligatorios.
+
+</form>
+</body>
+<footer>
+	Formulario de  Brandon Ortega Mora IC-43M
+</footer>
 </html>
